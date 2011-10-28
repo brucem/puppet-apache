@@ -41,12 +41,14 @@ class apache::debian inherits apache::base {
 
   file { "${apache::params::root}/html":
     ensure  => directory,
+    owner   => $apache::params::user,
+    group   => $apache::params::group,
   }
 
   file { "${apache::params::root}/html/index.html":
     ensure  => present,
-    owner   => root,
-    group   => root,
+    owner   => $apache::params::user,
+    group   => $apache::params::group,
     mode    => 644,
     content => "<html><body><h1>It works!</h1></body></html>\n",
   }
