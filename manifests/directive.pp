@@ -38,23 +38,23 @@ Example usage:
 */
 define apache::directive ($ensure="present", $directive="", $filename="", $vhost) {
 
-  $fname = regsubst($name, "\s", "_", "G")
+  $fname = regsubst($name, '\s', '_', 'G')
 
   include apache::params
 
   file{ "${name} directive on ${vhost}":
-    ensure => $ensure,
-    content => "# file managed by puppet\n${directive}\n",
-    seltype => $operatingsystem ? {
-      "RedHat" => "httpd_config_t",
-      "CentOS" => "httpd_config_t",
+    ensure    => $ensure,
+    content   => "# file managed by puppet\n${directive}\n",
+    seltype    => $::operatingsystem ? {
+      'RedHat' => 'httpd_config_t',
+      'CentOS' => 'httpd_config_t',
       default  => undef,
     },
-    name    => $filename ? {
-      ""      => "${apache::params::root}/${vhost}/conf/directive-${fname}.conf",
+    name      => $filename ? {
+      ''      => "${apache::params::root}/${vhost}/conf/directive-${fname}.conf",
       default => "${apache::params::root}/${vhost}/conf/${filename}",
     },
-    notify  => Service["apache"],
-    require => Apache::Vhost[$vhost],
+    notify    => Service['apache'],
+    require   => Apache::Vhost[$vhost],
   }
 }
